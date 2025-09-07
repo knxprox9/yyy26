@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { FiTruck, FiShield, FiGift, FiX } from 'react-icons/fi';
 import ToggleButton from './ToggleButton';
 
-// بيانات وسائل الدفع
-const PAYMENT_METHODS = [
+// بيانات الخدمات المتاحة (ليست وسائل دفع)
+const SERVICES = [
   { id: 'visa', name: 'Visa', content: 'VISA', type: 'text' },
   { id: 'mastercard', name: 'Mastercard', content: 'circles', type: 'special' },
   { id: 'googleplay', name: 'Google Play', content: '▶', type: 'symbol' },
@@ -19,45 +19,112 @@ const PAYMENT_METHODS = [
   { id: 'flower', name: 'Flower', content: '❀', type: 'symbol' }
 ];
 
-// مكون وسيلة الدفع
-const PaymentMethod = ({ method, showLabel = false }) => (
-  <li className={`payment-card ${method.id}`} aria-label={method.name}>
-    <div className={`card-icon premium-card ${method.id}`}>
-      {method.content === 'circles' ? (
+// عنصر الخدمة
+const ServiceItem = ({ service, showLabel = false }) => (
+  <li className={`payment-card ${service.id}`} aria-label={service.name}>
+    <div className={`card-icon premium-card ${service.id}`}>
+      {service.content === 'circles' ? (
         <div className="card-circles">
           <div className="circle red"></div>
           <div className="circle yellow"></div>
         </div>
       ) : (
-        <div className="card-brand">{method.content}</div>
+        <div className="card-brand">{service.content}</div>
       )}
     </div>
-    {showLabel && <div className="label-text">{method.name}</div>}
+    {showLabel && <div className="label-text">{service.name}</div>}
   </li>
 );
 
 const ProductCard = () => {
   const [miniOpen, setMiniOpen] = useState(false);
+  const toggleRef = useRef(null);
+  const overlayRef = useRef(null);
+  const closeBtnRef = useRef(null);
+  const contentRootRef = useRef(null);
+
+  const openMini = useCallback(() => {
+    setMiniOpen(true);
+  }, []);
+
+  const closeMini = useCallback(() => {
+    setMiniOpen(false);
+    // إعادة التركيز لزر التبديل بعد الإغلاق
+    setTimeout(() => {
+      try { toggleRef.current && toggleRef.current.focus(); } catch {}
+    }, 0);
+  }, []);
+
+  // Trap Focus + ESC
+  useEffect(() => {
+    if (!miniOpen) return;
+
+    const overlayEl = overlayRef.current;
+    const focusableSelectors = [
+      'a[href]', 'button', 'input', 'select', 'textarea', '[tabindex]:not([tabindex="-1"])'
+    ].join(',');
+
+    const getFocusable = () => Array.from(overlayEl.querySelectorAll(focusableSelectors))
+      .filter(el => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden'));
+
+    // تركيز أول عنصر (زر الإغلاق)
+    try { closeBtnRef.current && closeBtnRef.current.focus(); } catch {}
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeMini();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const focusables = getFocusable();
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [miniOpen, closeMini]);
 
   return (
     <StyledWrapper data-open={miniOpen}>
       <div className="card">
         {/* خلفية المودال */}
         {miniOpen && (
-          <div className="screen-dim" onClick={() => setMiniOpen(false)} aria-hidden="true" />
+          <div className="screen-dim" onClick={closeMini} aria-hidden="true" />
         )}
 
         {/* المودال المصغر */}
         {miniOpen && (
-          <div className="mini-overlay" role="dialog" aria-modal="true" aria-label="صفحة مصغرة">
-            <button className="close-btn" onClick={() => setMiniOpen(false)} aria-label="إغلاق">
+          <div
+            className="mini-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-label="صفحة مصغرة"
+            ref={overlayRef}
+          >
+            <button
+              className="close-btn"
+              onClick={closeMini}
+              aria-label="إغلاق"
+              ref={closeBtnRef}
+            >
               <FiX size={16} />
             </button>
             <div className="mini-content">
               <div className="mini-payments">
                 <ul className="colors-container">
-                  {PAYMENT_METHODS.map(method => (
-                    <PaymentMethod key={method.id} method={method} showLabel={true} />
+                  {SERVICES.map(service => (
+                    <ServiceItem key={service.id} service={service} showLabel={true} />
                   ))}
                 </ul>
               </div>
@@ -65,123 +132,127 @@ const ProductCard = () => {
           </div>
         )}
 
-        {/* حاوي الصورة */}
-        <div className="image-container">
-          <span className="status-dot online" aria-label="متصل" />
-          <div className="toggle-wrapper" title="فتح الصفحة المصغرة">
-            <ToggleButton active={miniOpen} onClick={() => setMiniOpen(true)} />
-          </div>
+        {/* محتوى الكرت الرئيسي - يُخفى لقارئات الشاشة عند فتح المودال */}
+        <div ref={contentRootRef} aria-hidden={miniOpen ? true : undefined}>
+          {/* حاوي الصورة */}
+          <div className="image-container">
+            {/* النقطة الخضراء: تحسين بصري فقط */}
+            <span className="status-dot online" aria-hidden="true" />
+            <div className="toggle-wrapper" title="فتح الصفحة المصغرة">
+              <ToggleButton active={miniOpen} onClick={openMini} ref={toggleRef} />
+            </div>
 
-          {/* خلفية SVG محسنة */}
-          <svg viewBox="0 0 1921 1081" className="svg" aria-hidden="true">
-            <defs>
-              <radialGradient id="bg-gradient" cx="0.5" cy="0.5" r="1.2">
-                <stop stopColor="#ffffff" offset={0} />
-                <stop stopColor="#f8fafc" offset={0.3} />
-                <stop stopColor="#e2e8f0" offset={0.7} />
-                <stop stopColor="#cbd5e0" offset={1} />
-              </radialGradient>
-            </defs>
-            <rect fill="url(#bg-gradient)" width="100%" height="100%" />
-          </svg>
+            {/* خلفية SVG محسنة */}
+            <svg viewBox="0 0 1921 1081" className="svg" aria-hidden="true">
+              <defs>
+                <radialGradient id="bg-gradient" cx="0.5" cy="0.5" r="1.2">
+                  <stop stopColor="#ffffff" offset={0} />
+                  <stop stopColor="#f8fafc" offset={0.3} />
+                  <stop stopColor="#e2e8f0" offset={0.7} />
+                  <stop stopColor="#cbd5e0" offset={1} />
+                </radialGradient>
+              </defs>
+              <rect fill="url(#bg-gradient)" width="100%" height="100%" />
+            </svg>
 
-          {/* صورة البطاقات */}
-          <div className="animated-cards-stack">
-            <img src="/assets/credit-cards-stack.png" alt="مجموعة البطاقات الائتمانية" />
-          </div>
-        </div>
-
-        {/* زر المفضلة */}
-        <label className="favorite">
-          <input defaultChecked type="checkbox" />
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000">
-            <circle cx="12" cy="12" r="10"/>
-          </svg>
-        </label>
-
-        {/* المحتوى */}
-        <div className="content">
-          <div className="brand">بطائق إلكترونية مسبقة الدفع</div>
-          <div className="product-name">بطاقة دفع رقمية جاهزة للاستخدام الفوري</div>
-          
-          {/* مؤشر التحميل */}
-          <div className="loading-indicator">
-            <div className="dot"></div>
-            <div className="dot"></div>      
-            <div className="dot"></div>
-          </div>
-          
-          {/* معاينة وسائل الدفع */}
-          <div className="color-size-container">
-            <div className="colors">
-              <ul className="colors-container">
-                {PAYMENT_METHODS.slice(0, 4).map(method => (
-                  <PaymentMethod key={method.id} method={method} />
-                ))}
-              </ul>
+            {/* صورة الخدمات */}
+            <div className="animated-cards-stack">
+              <img src="/assets/credit-cards-stack.png" alt="مجموعة بطائق إلكترونية" />
             </div>
           </div>
-          
-          {/* شريط المعلومات */}
-          <div className="service-info-bar">
-            <div className="service-header">
-              <div className="service-level">
-                <span className="level-icon">⭐</span>
-                <span className="level-text">بطاقات رقمية</span>
-              </div>
-              <div className="service-duration">
-                <span className="duration-icon">🚀</span>
-                <span className="duration-text">تفعيل فوري</span>
+
+          {/* زر المفضلة */}
+          <label className="favorite">
+            <input defaultChecked type="checkbox" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000">
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+          </label>
+
+          {/* المحتوى */}
+          <div className="content">
+            <div className="brand">بطائق إلكترونية مسبقة الدفع</div>
+            <div className="product-name">بطاقة دفع رقمية جاهزة للاستخدام الفوري</div>
+            
+            {/* مؤشر التحميل */}
+            <div className="loading-indicator">
+              <div className="dot"></div>
+              <div className="dot"></div>      
+              <div className="dot"></div>
+            </div>
+            
+            {/* معاينة الخدمات المتاحة */}
+            <div className="color-size-container">
+              <div className="colors">
+                <ul className="colors-container">
+                  {SERVICES.slice(0, 4).map(service => (
+                    <ServiceItem key={service.id} service={service} />
+                  ))}
+                </ul>
               </div>
             </div>
             
-            <div className="progress-container">
-              <div className="progress-bar">
-                <div className="progress-fill" style={{width: '95%'}}></div>
+            {/* شريط المعلومات */}
+            <div className="service-info-bar">
+              <div className="service-header">
+                <div className="service-level">
+                  <span className="level-icon">⭐</span>
+                  <span className="level-text">بطاقات رقمية</span>
+                </div>
+                <div className="service-duration">
+                  <span className="duration-icon">🚀</span>
+                  <span className="duration-text">تفعيل فوري</span>
+                </div>
               </div>
-              <span className="progress-percentage">95%</span>
+              
+              <div className="progress-container">
+                <div className="progress-bar">
+                  <div className="progress-fill" style={{width: '95%'}}></div>
+                </div>
+                <span className="progress-percentage">95%</span>
+              </div>
+              
+              <div className="service-stats">
+                <div className="stat-item">
+                  <span className="stat-icon">🎯</span>
+                  <span className="stat-text">تم بيع +250 بطاقة</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-icon">💎</span>
+                  <span className="stat-text">ثقة +800 عميل</span>
+                </div>
+              </div>
+              
+              <div className="service-features">
+                <div className="feature-item">
+                  <FiTruck className="feature-icon" />
+                  <span className="feature-text">إرسال فوري</span>
+                </div>
+                <div className="feature-item">
+                  <FiShield className="feature-icon" />
+                  <span className="feature-text">أمان مضمون</span>
+                </div>
+                <div className="feature-item">
+                  <FiGift className="feature-icon" />
+                  <span className="feature-text">عروض حصرية</span>
+                </div>
+              </div>
             </div>
             
-            <div className="service-stats">
-              <div className="stat-item">
-                <span className="stat-icon">🎯</span>
-                <span className="stat-text">تم بيع +250 بطاقة</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-icon">💎</span>
-                <span className="stat-text">ثقة +800 عميل</span>
-              </div>
-            </div>
-            
-            <div className="service-features">
-              <div className="feature-item">
-                <FiTruck className="feature-icon" />
-                <span className="feature-text">إرسال فوري</span>
-              </div>
-              <div className="feature-item">
-                <FiShield className="feature-icon" />
-                <span className="feature-text">أمان مضمون</span>
-              </div>
-              <div className="feature-item">
-                <FiGift className="feature-icon" />
-                <span className="feature-text">عروض حصرية</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="divider" aria-hidden="true" />
+            <div className="divider" aria-hidden="true" />
 
-          {/* شريط الثقة */}
-          <div className="trust-bar">
-            <div className="trust-item"><span className="trust-icon">🛡️</span></div>
-            <div className="trust-separator">|</div>
-            <div className="trust-item"><span className="trust-icon">🏆</span></div>
-            <div className="trust-separator">|</div>
-            <div className="trust-item"><span className="trust-icon">📊</span></div>
-            <div className="trust-separator">|</div>
-            <div className="trust-item"><span className="trust-icon">⚡</span></div>
-            <div className="trust-separator">|</div>
-            <div className="trust-item"><span className="trust-icon">🏅</span></div>
+            {/* شريط الثقة */}
+            <div className="trust-bar">
+              <div className="trust-item"><span className="trust-icon">🛡️</span></div>
+              <div className="trust-separator">|</div>
+              <div className="trust-item"><span className="trust-icon">🏆</span></div>
+              <div className="trust-separator">|</div>
+              <div className="trust-item"><span className="trust-icon">📊</span></div>
+              <div className="trust-separator">|</div>
+              <div className="trust-item"><span className="trust-icon">⚡</span></div>
+              <div className="trust-separator">|</div>
+              <div className="trust-item"><span className="trust-icon">🏅</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -246,6 +317,11 @@ const StyledWrapper = styled.div`
     opacity: 0.95; 
     z-index: 30; 
     box-shadow: 0 6px 12px rgba(0,0,0,0.25); 
+  }
+
+  .mini-overlay .close-btn:focus-visible {
+    outline: 3px solid #2563EB;
+    outline-offset: 2px;
   }
 
   .mini-content { 
@@ -504,7 +580,7 @@ const StyledWrapper = styled.div`
     margin-top: 0.2rem; 
   }
 
-  /* تصميم بطاقات الدفع المميزة */
+  /* تصميم بطاقات الخدمة المميزة */
   .premium-card {
     width: 42px !important;
     height: 28px !important;
@@ -526,7 +602,7 @@ const StyledWrapper = styled.div`
     overflow: hidden !important;
   }
 
-  /* ألوان بطاقات الدفع */
+  /* ألوان بطاقات الخدمة */
   .premium-card.visa {
     background: linear-gradient(135deg, #1a1f71 0%, #4757a9 50%, #1a1f71 100%) !important;
     color: #ffffff !important;

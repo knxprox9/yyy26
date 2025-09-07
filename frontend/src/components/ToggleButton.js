@@ -1,18 +1,33 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 
-const Button = ({ active = false, onClick = () => {} }) => {
+const Button = forwardRef(function Button({ active = false, onClick = () => {} }, ref) {
   const handleClick = (e) => {
     e.stopPropagation();
     try { console.log('ToggleButton: click'); } catch {}
     onClick();
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick(e);
+    }
+  };
+
   return (
     <StyledWrapper>
       <div className="container">
-        <div className="toggle" role="button" aria-label="فتح الصفحة المصغرة" title="فتح الصفحة المصغرة" onClick={handleClick}>
-          <input type="checkbox" checked={active} readOnly onClick={handleClick} />
+        <div className="toggle" role="button" aria-label="فتح الصفحة المصغرة" title="فتح الصفحة المصغرة">
+          <input
+            ref={ref}
+            type="checkbox"
+            checked={active}
+            readOnly
+            aria-label="فتح الصفحة المصغرة"
+            onClick={handleClick}
+            onKeyDown={handleKeyDown}
+          />
           <span className="button" onClick={handleClick} />
           <span className="label" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -24,7 +39,7 @@ const Button = ({ active = false, onClick = () => {} }) => {
       </div>
     </StyledWrapper>
   );
-}
+});
 
 const StyledWrapper = styled.div`
   .toggle {
@@ -96,6 +111,11 @@ const StyledWrapper = styled.div`
     top: 0;
   }
 
+  .toggle input:focus-visible {
+    outline: 3px solid #2563EB;
+    outline-offset: 2px;
+  }
+
   .toggle input:active ~ .button {
     filter: blur(0.5px);
     box-shadow: 0 12px 25px -4px rgba(0, 0, 0, 0.4), inset 0 -8px 30px 1px rgba(255, 255, 255, 0.9), 0 -10px 15px -1px rgba(255, 255, 255, 0.6), inset 0 8px 25px 0 rgba(0, 0, 0, 0.4), inset 0 0 10px 1px rgba(255, 255, 255, 0.6);
@@ -113,6 +133,12 @@ const StyledWrapper = styled.div`
 
   .toggle input:checked ~ .label {
     color: rgba(0, 0, 0, 0.8);
-  }`;
+  }
+
+  .toggle .button:focus-visible, .toggle .label:focus-visible {
+    outline: 3px solid #2563EB;
+    outline-offset: 2px;
+  }
+`;
 
 export default Button;
