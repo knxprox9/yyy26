@@ -224,15 +224,15 @@ const ProductCard = () => {
               </div>
               
               <div className="service-features">
-                <div className="feature-item">
+                <div className="feature-item" tabIndex={0}>
                   <FiTruck className="feature-icon" />
                   <span className="feature-text">إرسال فوري</span>
                 </div>
-                <div className="feature-item">
+                <div className="feature-item" tabIndex={0}>
                   <FiShield className="feature-icon" />
                   <span className="feature-text">أمان مضمون</span>
                 </div>
-                <div className="feature-item">
+                <div className="feature-item" tabIndex={0}>
                   <FiGift className="feature-icon" />
                   <span className="feature-text">عروض حصرية</span>
                 </div>
@@ -267,14 +267,23 @@ const StyledWrapper = styled.div`
     width: 260px;
     background: white;
     border-radius: 1.2rem;
-    padding: 0.4rem;
-    padding-bottom: 0.8rem;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 50px 30px -20px, 
-                rgba(0, 0, 0, 0.1) 0px 20px 25px -15px;
-    transition: all 0.5s ease-in-out;
+    padding: 0.48rem; /* +0.08rem لضبط الحافة */
+    padding-bottom: 0.9rem;
+    box-shadow:
+      0 8px 12px rgba(16, 24, 40, 0.06),
+      0 24px 48px -24px rgba(16, 24, 40, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition: transform 220ms ease, box-shadow 220ms ease;
     direction: rtl;
     overflow: visible;
     z-index: 10;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 10px 16px rgba(16, 24, 40, 0.08),
+      0 30px 56px -26px rgba(16, 24, 40, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
   }
 
   /* المودال */
@@ -314,9 +323,9 @@ const StyledWrapper = styled.div`
     align-items: center; 
     justify-content: center; 
     cursor: pointer; 
-    opacity: 0.95; 
+    opacity: 0.96; 
     z-index: 30; 
-    box-shadow: 0 6px 12px rgba(0,0,0,0.25); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25); 
   }
 
   .mini-overlay .close-btn:focus-visible {
@@ -325,9 +334,9 @@ const StyledWrapper = styled.div`
   }
 
   .mini-content { 
-    padding: 0.75rem 0.75rem 1rem 0.75rem; 
+    padding: 0.8rem 0.8rem 1rem 0.8rem; 
     padding-top: 2.2rem; 
-    color: #2d3748; 
+    color: #1f2937; /* رفع التباين */
     height: 100%; 
     font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
   }
@@ -355,7 +364,7 @@ const StyledWrapper = styled.div`
   .mini-overlay .payment-card { 
     position: relative; 
     cursor: pointer; 
-    transition: transform 0.2s ease; 
+    transition: transform 0.22s ease, box-shadow 0.22s ease; 
     width: 56px; 
     display: flex; 
     flex-direction: column; 
@@ -364,12 +373,12 @@ const StyledWrapper = styled.div`
   }
 
   .mini-overlay .payment-card:hover { 
-    transform: scale(1.05); 
+    transform: translateY(-2px) scale(1.06); 
   }
 
   .mini-overlay .payment-card .label-text { 
     font-size: 0.55rem; 
-    color: #4a5568; 
+    color: #374151; 
     font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
     font-weight: 600; 
     line-height: 1.3; 
@@ -383,7 +392,7 @@ const StyledWrapper = styled.div`
     height: 140px; 
     border-radius: 0.8rem; 
     border-top-left-radius: 4.5rem; 
-    margin-bottom: 1.3rem; 
+    margin-bottom: 1.35rem; 
     overflow: visible; 
   }
 
@@ -403,8 +412,8 @@ const StyledWrapper = styled.div`
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    animation: cards-entrance 1.2s ease-out forwards;
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+    animation: cards-entrance 1.1s ease-out forwards;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.28));
   }
 
   .card .image-container .animated-cards-stack img {
@@ -416,7 +425,7 @@ const StyledWrapper = styled.div`
 
   @keyframes cards-entrance {
     0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+    50% { transform: translate(-50%, -50%) scale(1.06); opacity: 0.9; }
     100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
   }
 
@@ -429,9 +438,9 @@ const StyledWrapper = styled.div`
     background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 25%, #e2e8f0 50%, #cbd5e0 75%, #94a3b8 100%);
     box-shadow: 
       inset 0 8px 16px rgba(255,255,255,0.8),
-      inset 0 -8px 16px rgba(0,0,0,0.3),
-      inset 8px 0 12px rgba(255,255,255,0.4),
-      inset -8px 0 12px rgba(0,0,0,0.2);
+      inset 0 -8px 16px rgba(0,0,0,0.25),
+      inset 8px 0 12px rgba(255,255,255,0.35),
+      inset -8px 0 12px rgba(0,0,0,0.18);
   }
 
   .card .image-container .svg::before {
@@ -499,14 +508,14 @@ const StyledWrapper = styled.div`
 
   .card .content .brand { 
     font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Cairo', sans-serif;
-    font-weight: 700; 
-    font-size: 0.9rem; 
-    color: #2d3748; 
+    font-weight: 800; 
+    font-size: 0.94rem; 
+    color: #1f2937; /* تباين أعلى */
     text-align: right; 
     margin-bottom: 12px; 
-    line-height: 1.2; 
+    line-height: 1.25; 
     letter-spacing: 0.01em; 
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); 
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); 
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis; 
@@ -514,14 +523,14 @@ const StyledWrapper = styled.div`
 
   .card .content .product-name { 
     font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Cairo', sans-serif;
-    font-weight: 500; 
-    color: #1a202c; 
-    font-size: 0.82rem; 
-    margin-bottom: 15px; 
+    font-weight: 600; 
+    color: #111827; 
+    font-size: 0.86rem; 
+    margin-bottom: 16px; 
     text-align: right; 
-    line-height: 1.5; 
+    line-height: 1.55; 
     letter-spacing: 0.005em; 
-    text-shadow: 0 0.5px 2px rgba(0, 0, 0, 0.06); 
+    text-shadow: 0 0.5px 2px rgba(0, 0, 0, 0.05); 
     max-width: 100%;
     word-spacing: 0.08em; 
   }
@@ -560,7 +569,7 @@ const StyledWrapper = styled.div`
     text-transform: uppercase; 
     font-size: 0.7rem; 
     font-weight: 700; 
-    color: #a8a8a8; 
+    color: #9ca3af; /* رمادي متوازن */
     gap: 2rem; 
     margin-bottom: 1.5rem; 
   }
@@ -590,15 +599,15 @@ const StyledWrapper = styled.div`
     justify-content: center !important;
     position: relative !important;
     cursor: pointer !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s ease !important;
     font-weight: 700 !important;
     font-size: 9px !important;
     letter-spacing: 0.5px !important;
     box-shadow: 
-      0 3px 12px rgba(0, 0, 0, 0.18),
+      0 3px 10px rgba(0, 0, 0, 0.18),
       0 2px 4px rgba(0, 0, 0, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
     overflow: hidden !important;
   }
 
@@ -608,102 +617,23 @@ const StyledWrapper = styled.div`
     color: #ffffff !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
   }
-
-  .premium-card.mastercard {
-    background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%) !important;
-    color: #ffffff !important;
-  }
-
-  .premium-card.googleplay {
-    background: linear-gradient(135deg, #34a853 0%, #4caf50 50%, #2e7d32 100%) !important;
-    color: #ffffff !important;
-    font-size: 12px !important;
-  }
-
-  .premium-card.roblox {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #a93226 100%) !important;
-    color: #ffffff !important;
-    font-size: 12px !important;
-    font-weight: 900 !important;
-  }
-
-  .premium-card.playstation {
-    background: linear-gradient(135deg, #003791 0%, #0050c7 50%, #003791 100%) !important;
-    color: #ffffff !important;
-    font-size: 10px !important;
-  }
-
-  .premium-card.amazon {
-    background: linear-gradient(135deg, #ff9900 0%, #ffb84d 50%, #e68a00 100%) !important;
-    color: #000000 !important;
-    font-weight: 900 !important;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-  }
-
-  .premium-card.itunes {
-    background: linear-gradient(135deg, #fa2d48 0%, #ff5470 50%, #e91e40 100%) !important;
-    color: #ffffff !important;
-    font-size: 14px !important;
-  }
-
-  .premium-card.shein {
-    background: linear-gradient(135deg, #000000 0%, #2c2c2c 50%, #000000 100%) !important;
-    color: #ffffff !important;
-    font-size: 7px !important;
-    font-weight: 900 !important;
-  }
-
-  .premium-card.steam {
-    background: linear-gradient(135deg, #1b2838 0%, #2a475e 50%, #1b2838 100%) !important;
-    color: #66c0f4 !important;
-    font-size: 14px !important;
-  }
-
-  .premium-card.fortnite {
-    background: linear-gradient(135deg, #6a5acd 0%, #8a7dda 50%, #5a4fcf 100%) !important;
-    color: #ffffff !important;
-    font-size: 12px !important;
-    font-weight: 900 !important;
-  }
-
-  .premium-card.razer {
-    background: linear-gradient(135deg, #00ff00 0%, #44ff44 50%, #00cc00 100%) !important;
-    color: #000000 !important;
-    font-size: 12px !important;
-    font-weight: 900 !important;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) !important;
-  }
-
-  .premium-card.flower {
-    background: linear-gradient(135deg, #ff69b4 0%, #ff99cc 50%, #ff1493 100%) !important;
-    color: #ffffff !important;
-    font-size: 14px !important;
-  }
+  .premium-card.mastercard { background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%) !important; color: #ffffff !important; }
+  .premium-card.googleplay { background: linear-gradient(135deg, #34a853 0%, #4caf50 50%, #2e7d32 100%) !important; color: #ffffff !important; font-size: 12px !important; }
+  .premium-card.roblox { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #a93226 100%) !important; color: #ffffff !important; font-size: 12px !important; font-weight: 900 !important; }
+  .premium-card.playstation { background: linear-gradient(135deg, #003791 0%, #0050c7 50%, #003791 100%) !important; color: #ffffff !important; font-size: 10px !important; }
+  .premium-card.amazon { background: linear-gradient(135deg, #ff9900 0%, #ffb84d 50%, #e68a00 100%) !important; color: #000000 !important; font-weight: 900 !important; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) !important; }
+  .premium-card.itunes { background: linear-gradient(135deg, #fa2d48 0%, #ff5470 50%, #e91e40 100%) !important; color: #ffffff !important; font-size: 14px !important; }
+  .premium-card.shein { background: linear-gradient(135deg, #000000 0%, #2c2c2c 50%, #000000 100%) !important; color: #ffffff !important; font-size: 7px !important; font-weight: 900 !important; }
+  .premium-card.steam { background: linear-gradient(135deg, #1b2838 0%, #2a475e 50%, #1b2838 100%) !important; color: #66c0f4 !important; font-size: 14px !important; }
+  .premium-card.fortnite { background: linear-gradient(135deg, #6a5acd 0%, #8a7dda 50%, #5a4fcf 100%) !important; color: #ffffff !important; font-size: 12px !important; font-weight: 900 !important; }
+  .premium-card.razer { background: linear-gradient(135deg, #00ff00 0%, #44ff44 50%, #00cc00 100%) !important; color: #000000 !important; font-size: 12px !important; font-weight: 900 !important; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) !important; }
+  .premium-card.flower { background: linear-gradient(135deg, #ff69b4 0%, #ff99cc 50%, #ff1493 100%) !important; color: #ffffff !important; font-size: 14px !important; }
 
   /* دوائر Mastercard */
-  .card-circles {
-    display: flex !important;
-    align-items: center !important;
-    gap: -2px !important;
-  }
-
-  .card-circles .circle {
-    width: 12px !important;
-    height: 12px !important;
-    border-radius: 50% !important;
-    opacity: 0.9 !important;
-  }
-
-  .card-circles .circle.red {
-    background: #eb001b !important;
-    z-index: 2 !important;
-  }
-
-  .card-circles .circle.yellow {
-    background: #ff5f00 !important;
-    margin-left: -6px !important;
-    z-index: 1 !important;
-  }
+  .card-circles { display: flex !important; align-items: center !important; gap: -2px !important; }
+  .card-circles .circle { width: 12px !important; height: 12px !important; border-radius: 50% !important; opacity: 0.9 !important; }
+  .card-circles .circle.red { background: #eb001b !important; z-index: 2 !important; }
+  .card-circles .circle.yellow { background: #ff5f00 !important; margin-left: -6px !important; z-index: 1 !important; }
 
   /* تأثيرات التمرير */
   .card .premium-card:hover {
@@ -714,252 +644,80 @@ const StyledWrapper = styled.div`
       inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
   }
-
-  .card .premium-card:active {
-    transform: translateY(0px) scale(1.02) !important;
-    box-shadow: 
-      0 3px 12px rgba(0, 0, 0, 0.2),
-      0 1px 4px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-  }
+  .card .premium-card:active { transform: translateY(0px) scale(1.02) !important; box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; }
 
   /* أنماط المودال المصغر */
-  .mini-overlay .premium-card {
-    width: 50px !important;
-    height: 32px !important;
-    font-size: 9px !important;
-  }
-
+  .mini-overlay .premium-card { width: 50px !important; height: 32px !important; font-size: 9px !important; }
   .mini-overlay .premium-card.googleplay,
   .mini-overlay .premium-card.itunes,
   .mini-overlay .premium-card.steam,
-  .mini-overlay .premium-card.flower {
-    font-size: 16px !important;
-  }
-
-  .mini-overlay .premium-card.playstation {
-    font-size: 12px !important;
-  }
-
-  .mini-overlay .premium-card.razer {
-    font-size: 14px !important;
-  }
-
-  .mini-overlay .premium-card:hover {
-    transform: translateY(-3px) scale(1.1) !important;
-    box-shadow: 
-      0 12px 35px rgba(0, 0, 0, 0.3),
-      0 6px 15px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  }
-
-  .mini-overlay .premium-card:active {
-    transform: translateY(-1px) scale(1.05) !important;
-    box-shadow: 
-      0 6px 20px rgba(0, 0, 0, 0.25),
-      0 3px 8px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-  }
+  .mini-overlay .premium-card.flower { font-size: 16px !important; }
+  .mini-overlay .premium-card.playstation { font-size: 12px !important; }
+  .mini-overlay .premium-card.razer { font-size: 14px !important; }
+  .mini-overlay .premium-card:hover { transform: translateY(-3px) scale(1.1) !important; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3), 0 6px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; }
+  .mini-overlay .premium-card:active { transform: translateY(-1px) scale(1.05) !important; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important; }
 
   /* الخط الأزرق الفاصل */
-  .card .divider { 
-    height: 2.5px; 
-    width: 100%; 
-    background: linear-gradient(90deg, #2563EB 0%, #3b82f6 100%); 
-    opacity: 0.9; 
-    margin: 2.8rem 0 0.8rem; 
-    border-radius: 2px; 
-  }
+  .card .divider { height: 2.5px; width: 100%; background: linear-gradient(90deg, #2563EB 0%, #3b82f6 100%); opacity: 0.95; margin: 2.8rem 0 0.9rem; border-radius: 2px; }
 
   /* شريط المعلومات */
   .card .content .service-info-bar {
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     border: 1px solid #cbd5e0;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 12px;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.9rem;
     margin-left: -20px;
     margin-right: -20px;
     width: calc(100% + 40px);
     font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
   }
 
-  .card .content .service-info-bar .service-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
+  .card .content .service-info-bar .service-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .card .content .service-info-bar .service-level, .card .content .service-info-bar .service-duration { display: flex; align-items: center; gap: 4px; }
+  .card .content .service-info-bar .level-icon, .card .content .service-info-bar .duration-icon { font-size: 14px; }
+  .card .content .service-info-bar .level-text { color: #1f2937; font-weight: 800; font-size: 0.76rem; }
+  .card .content .service-info-bar .duration-text { color: #374151; font-weight: 700; font-size: 0.7rem; }
 
-  .card .content .service-info-bar .service-level,
-  .card .content .service-info-bar .service-duration {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
+  .card .content .service-info-bar .progress-container { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .card .content .service-info-bar .progress-bar { flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+  .card .content .service-info-bar .progress-fill { height: 100%; background: linear-gradient(90deg, #22c55e 0%, #16a34a 50%, #22c55e 100%); border-radius: 3px; transition: width 0.5s ease; }
+  .card .content .service-info-bar .progress-percentage { color: #16a34a; font-weight: 800; font-size: 0.7rem; min-width: 30px; text-align: right; }
 
-  .card .content .service-info-bar .level-icon,
-  .card .content .service-info-bar .duration-icon {
-    font-size: 14px;
-  }
+  .card .content .service-info-bar .service-stats { display: flex; justify-content: space-between; gap: 8px; }
+  .card .content .service-info-bar .stat-item { display: flex; align-items: center; gap: 3px; flex: 1; }
+  .card .content .service-info-bar .stat-icon { font-size: 12px; }
+  .card .content .service-info-bar .stat-text { color: #374151; font-weight: 700; font-size: 0.65rem; line-height: 1.2; }
 
-  .card .content .service-info-bar .level-text {
-    color: #2d3748;
-    font-weight: 700;
-    font-size: 0.75rem;
-  }
+  .card .content .service-info-bar .service-features { display: flex; justify-content: space-between; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e2e8f0; }
+  .card .content .service-info-bar .feature-item { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; padding: 6px; border-radius: 8px; transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease; }
+  .card .content .service-info-bar .feature-item:hover { background: rgba(37, 99, 235, 0.08); transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .card .content .service-info-bar .feature-item:active { transform: translateY(0); }
+  .card .content .service-info-bar .feature-item:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; background: rgba(37, 99, 235, 0.09); }
+  .card .content .service-info-bar .feature-icon { width: 16px; height: 16px; color: #2563EB; flex-shrink: 0; }
+  .card .content .service-info-bar .feature-text { font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif; font-weight: 700; font-size: 0.62rem; color: #1f2937; line-height: 1.2; text-align: center; }
 
-  .card .content .service-info-bar .duration-text {
-    color: #4a5568;
-    font-weight: 600;
-    font-size: 0.7rem;
-  }
-
-  .card .content .service-info-bar .progress-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-
-  .card .content .service-info-bar .progress-bar {
-    flex: 1;
-    height: 6px;
-    background: #e2e8f0;
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .card .content .service-info-bar .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #38a169 0%, #48bb78 50%, #38a169 100%);
-    border-radius: 3px;
-    transition: width 0.5s ease;
-  }
-
-  .card .content .service-info-bar .progress-percentage {
-    color: #38a169;
-    font-weight: 700;
-    font-size: 0.7rem;
-    min-width: 30px;
-    text-align: right;
-  }
-
-  .card .content .service-info-bar .service-stats {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .card .content .service-info-bar .stat-item {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    flex: 1;
-  }
-
-  .card .content .service-info-bar .stat-icon {
-    font-size: 12px;
-  }
-
-  .card .content .service-info-bar .stat-text {
-    color: #4a5568;
-    font-weight: 600;
-    font-size: 0.65rem;
-    line-height: 1.2;
-  }
-
-  .card .content .service-info-bar .service-features {
-    display: flex;
-    justify-content: space-between;
-    gap: 6px;
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid #e2e8f0;
-  }
-
-  .card .content .service-info-bar .feature-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    flex: 1;
-    padding: 4px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-  }
-
-  .card .content .service-info-bar .feature-item:hover {
-    background: rgba(56, 161, 105, 0.1);
-    transform: translateY(-1px);
-  }
-
-  .card .content .service-info-bar .feature-icon {
-    width: 16px;
-    height: 16px;
-    color: #38a169;
-    flex-shrink: 0;
-  }
-
-  .card .content .service-info-bar .feature-text {
-    font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
-    font-weight: 600;
-    font-size: 0.6rem;
-    color: #4a5568;
-    line-height: 1.2;
-    text-align: center;
-  }
-
-  .card .content .service-info-bar:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
+  .card .content .service-info-bar:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); }
 
   /* شريط الثقة */
-  .card .content .trust-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    padding: 0;
-    margin: 0;
-    font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
-    background: none;
-    border: none;
-    box-shadow: none;
-  }
-
-  .card .content .trust-bar .trust-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .card .content .trust-bar .trust-separator {
-    color: #cbd5e0;
-    font-weight: 300;
-    font-size: 0.7rem;
-    opacity: 0.8;
-  }
-
-  .card .content .trust-bar .trust-icon {
-    font-size: 0.9rem;
-    line-height: 1;
-    transition: all 0.3s ease;
-  }
+  .card .content .trust-bar { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 0; margin: 0; font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif; background: none; border: none; box-shadow: none; }
+  .card .content .trust-bar .trust-item { display: flex; align-items: center; justify-content: center; }
+  .card .content .trust-bar .trust-separator { color: #e5e7eb; font-weight: 300; font-size: 0.7rem; opacity: 0.9; }
+  .card .content .trust-bar .trust-icon { font-size: 0.96rem; line-height: 1; transition: all 0.22s ease; }
 
   /* انيميشن النقاط الجذابة */
-  @keyframes circle-bounce { 
-    0% { transform: scale(1); } 
-    50% { transform: scale(1.3); } 
-    100% { transform: scale(1); } 
-  }
+  @keyframes circle-bounce { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-  @keyframes fadeIn { 
-    from { opacity: 0; } 
-    to { opacity: 1; } 
+  /* تحسينات شاشة صغيرة جداً */
+  @media (max-width: 390px) {
+    .card .content .service-info-bar {
+      margin-left: -14px;
+      margin-right: -14px;
+      width: calc(100% + 28px);
+    }
+    .card .image-container { height: 136px; }
   }
 `;
 
