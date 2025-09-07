@@ -681,7 +681,16 @@ const StyledWrapper = styled.div`
   .mini-overlay .premium-card:active { transform: translateY(-1px) scale(1.05) !important; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important; }
 
   /* الخط الأزرق الفاصل */
-  .card .divider { height: 2.5px; width: 100%; background: linear-gradient(90deg, #2563EB 0%, #3b82f6 100%); opacity: 0.95; margin: 2.8rem 0 0.9rem; border-radius: 2px; }
+  .card .divider { 
+    height: 1.5px; 
+    width: calc(100% + 40px); 
+    margin: 2.8rem 0 0.9rem; 
+    margin-left: -20px;
+    margin-right: -20px;
+    background: linear-gradient(90deg, #2563EB 0%, #3b82f6 100%); 
+    opacity: 0.95; 
+    border-radius: 1px; 
+  }
 
   /* شريط المعلومات */
   .card .content .service-info-bar {
