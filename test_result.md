@@ -131,12 +131,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "ProductCard renders with Arabic RTL correctly"
-    - "Mini overlay opens via ToggleButton and shows payment grid"
-    - "Favorite toggle state visual change"
-    - "No console errors and assets load (credit-cards-stack.png)"
-    - "Responsive at 390px, 768px, 1280px"
-  stuck_tasks: []
+    - "Fix keyboard accessibility issues in ProductCard"
+    - "Implement proper focus management and ARIA attributes"
+    - "Ensure WCAG 2.1 AA compliance for keyboard navigation"
+  stuck_tasks:
+    - "Keyboard accessibility implementation"
   test_all: false
   test_priority: "high_first"
 
