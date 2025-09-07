@@ -108,9 +108,9 @@ backend: []
 frontend:
   - task: "Validate ProductCard rendering, interactions, accessibility, and responsiveness on preview"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/components/ProductCard.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -120,6 +120,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "✅ COMPREHENSIVE TESTING COMPLETE: All core functionality working. Page loads with status 200, no console errors. ProductCard renders correctly with RTL layout, status dot and favorite positioned correctly. ToggleButton opens/closes mini overlay with 12 payment methods and labels. Credit-cards-stack.png loads successfully (566px width). Favorite toggle changes SVG fill color from green to gray with animation. Responsive design works perfectly at 390px, 768px, 1280px - card stays centered with no overflow. All ARIA attributes present: mini overlay has role='dialog', aria-modal='true', aria-label. ToggleButton and status dot have proper aria-labels. Touch targets adequate (65px), focus states visible, good text contrast. Minor: Status dot aria-label shows 'online' instead of Arabic text, but functionality is perfect."
+      - working: false
+        agent: "testing"
+        comment: "❌ PHASE 1 KEYBOARD ACCESSIBILITY FAILED: Critical accessibility issues found during re-testing. FAILURES: 1) Tab navigation focuses wrong element (checkbox without proper aria-label), 2) Enter key doesn't open overlay (only Space works), 3) Status dot missing aria-hidden=true attribute, 4) Focus management broken - no focus return to ToggleButton after ESC, 5) Close button not auto-focused when overlay opens, 6) Focus trap not implemented properly in overlay. WORKING: Space key opens overlay, no console errors, correct URL usage. The keyboard accessibility implementation is incomplete and fails WCAG 2.1 AA standards. Requires immediate fixes to focus management, aria-labels, and keyboard event handlers."
 metadata:
   created_by: "main_agent"
   version: "1.0"
