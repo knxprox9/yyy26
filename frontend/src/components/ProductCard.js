@@ -277,6 +277,7 @@ const StyledWrapper = styled.div`
     direction: rtl;
     overflow: visible;
     z-index: 10;
+    transform-origin: center; /* مهم للتحجيم على الشاشات الكبيرة */
   }
   .card:hover {
     transform: translateY(-2px);
@@ -284,6 +285,28 @@ const StyledWrapper = styled.div`
       0 10px 16px rgba(16, 24, 40, 0.08),
       0 30px 56px -26px rgba(16, 24, 40, 0.22),
       inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+
+  /* تحسينات شاشة صغيرة 360-400px: مسافات آمنة وعدم اقتراب العناصر من الحواف */
+  @media (max-width: 400px) {
+    .card { padding-left: 0.6rem; padding-right: 0.6rem; }
+    .card .image-container { height: 136px; }
+    .card .image-container .toggle-wrapper { left: 28px; bottom: -20px; }
+    .card .content .service-info-bar {
+      margin-left: -14px;
+      margin-right: -14px;
+      width: calc(100% + 28px);
+    }
+  }
+
+  /* تحجيم لطيف على الشاشات الواسعة حتى لا يبدو الكرت صغيراً جداً */
+  @media (min-width: 1280px) {
+    .card { transform: scale(1.06); }
+    .card:hover { transform: translateY(-2px) scale(1.08); }
+  }
+  @media (min-width: 1536px) {
+    .card { transform: scale(1.12); }
+    .card:hover { transform: translateY(-2px) scale(1.14); }
   }
 
   /* المودال */
